@@ -61,6 +61,34 @@ int
 mon_backtrace(int argc, char **argv, struct Trapframe *tf) {
     // LAB 2: Your code here
 
+    cprintf("Stack backtrace:\n");
+
+    uint64_t *rbp = 0x0;
+    uint64_t rip  = 0x0;
+    typedef long unsigned int lui;
+
+    struct Ripdebuginfo info;
+
+    rbp = (uint64_t *)read_rbp();
+    rip = rbp[1];
+
+    if (rbp == 0x0 || rip == 0x0) {
+        cprintf("JOS: ERR: Couldn't obtain backtrace...\n");
+        return -1;
+    }
+
+    do {
+        rip = rbp[1];
+        debuginfo_rip(rip, &info);
+
+        cprintf("  rbp %016lx  rip %016lx\n", (lui)rbp, (lui)rip);
+        cprintf("         %.256s:%d: %.*s+%ld\n", info.rip_file, info.rip_line,
+                info.rip_fn_namelen, info.rip_fn_name, (rip - info.rip_fn_addr));
+
+        rbp = (uint64_t *)rbp[0];
+
+    } while (rbp);
+
     return 0;
 }
 
