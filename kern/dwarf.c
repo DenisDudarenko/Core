@@ -593,6 +593,7 @@ address_by_fname(const struct Dwarf_Addrs *addrs, const char *fname, uintptr_t *
                         entry += dwarf_read_abbrev_entry(entry, form, NULL, 0, address_size);
                     } while (name || form);
                 }
+                return 0;
             }
             pubnames_entry += strlen((const char *)pubnames_entry) + 1;
         }
