@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "__tree": "c",
+        "filesystem": "c"
+    }
+}
